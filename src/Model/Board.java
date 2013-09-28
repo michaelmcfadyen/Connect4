@@ -101,13 +101,13 @@ public class Board {
 		return buffer.toString();
 	}
 	
-	public int gameOver(Board board){
+	public int gameOver(){
 		//System.out.println("Check for end game\n" + board.printSmall());
 		for(int x = 0; x < ROWS; x++){
 			for(int y = 0; y < COLUMNS; y++){
-				if(peek(x,y) != EMPTY){
+				if(this.peek(x,y) != EMPTY){
 					for(Direction dir : Direction.values()){
-						int winner = searchDir(dir.fromPos(x, y), dir, peek(x,y));
+						int winner = searchDir(dir.fromPos(x, y), dir, this.peek(x,y));
 						if( winner != -1)
 							//System.out.println("True");
 							return winner;
@@ -167,5 +167,13 @@ public class Board {
 	}
 
     }
+	
+	public static void main(String args[]){
+		Board b = new Board();
+		for(int i = 0; i < 4; i++){
+			b.put(i, 7, b.player2());
+		}
+		System.out.println(b.gameOver());
+	}
 
 }

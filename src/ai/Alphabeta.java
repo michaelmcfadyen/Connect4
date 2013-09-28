@@ -64,7 +64,7 @@ public class Alphabeta {
 				if (VERBOSE)
 					System.err.println("MAX LEVEL " + maxdepth + " " + move.toString());
 				if (maxdepth == 0) {	// if it is the maximum depth
-					int score = brdeval.evaluate(move.getBoard(),move, maxdepth, board.player1());	// score the board
+					int score = brdeval.evaluate(move.getBoard(),move, maxdepth);	// score the board
 					if (VERBOSE)
 						System.err.println("\t[" + score + "]");
 					if (score > myBest.getScore()) {
@@ -80,7 +80,7 @@ public class Alphabeta {
 				} else {	// otherwise, look one deeper
 					Best reply = chooseMove(mvgen, brdeval, move.getBoard(), Player.MIN, maxdepth-1, alpha, beta);
 					if (reply == null) {	// if no legal move for MIN to reply
-						int score = brdeval.evaluate(move.getBoard(), move, maxdepth, board.player1());	// evaluate the resulting board of the current move
+						int score = brdeval.evaluate(move.getBoard(), move, maxdepth);	// evaluate the resulting board of the current move
 						if (VERBOSE)
 							System.err.println("\t[" + score + "]");
 						if (score > myBest.getScore()) { // if it is a better move for MAX than the best move found this level
@@ -113,7 +113,7 @@ public class Alphabeta {
 				if (VERBOSE)
 					System.err.println("MIN LEVEL " + maxdepth + " " + move.toString());
 				if (maxdepth == 0) {	// if it is the maximum depth
-					int score = brdeval.evaluate(move.getBoard(),move, maxdepth, board.player2());	// score the board
+					int score = brdeval.evaluate(move.getBoard(),move, maxdepth);	// score the board
 					if (VERBOSE)
 						System.err.println("\t[" + score + "]");
 					if (score < myBest.getScore()) {
@@ -129,7 +129,7 @@ public class Alphabeta {
 				} else {	// otherwise, look one deeper
 					Best reply = chooseMove(mvgen, brdeval, move.getBoard(), Player.MAX, maxdepth-1, alpha, beta);
 					if (reply == null) {	// if no legal move for MAX to reply
-						int score = brdeval.evaluate(move.getBoard(),move, maxdepth, board.player2());	// evaluate the resulting board of the current move
+						int score = brdeval.evaluate(move.getBoard(),move, maxdepth);	// evaluate the resulting board of the current move
 						if (VERBOSE)
 							System.err.println("\t[" + score + "]");
 						if (score < myBest.getScore()) {	// if it is a better move for MIN than the best move found this level

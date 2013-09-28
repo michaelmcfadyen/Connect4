@@ -1,5 +1,4 @@
 package Hi;
-import ai.Alphabeta;
 import ai.Best;
 import ai.Minimax;
 import Evaluator.BoardEvaluator;
@@ -25,13 +24,13 @@ public class Main {
 	}
 	
 	public void playerMove(int player){
-		while((board.gameOver(this.board) == -1) && !board.draw(this.board)){
+		while((board.gameOver() == -1) && !board.draw(this.board)){
 			Best move;
 			if(num_of_moves == 0 && board.isEmpty(5, 3)){
 				move = board.firstMove(player);
 			}
 			else
-				move = Alphabeta.chooseMove(mg, ev, board, player,2);
+				move = Minimax.chooseMove(mg, ev, board, player, 1);
 			
 			System.out.printf("%s, %d\n",move.getMove(), move.getScore());
 			board = move.getMove().getBoard();
