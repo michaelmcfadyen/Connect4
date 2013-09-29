@@ -14,26 +14,39 @@ public class Main {
 	public MoveGen mg;
 	public BoardEvaluator ev;
 	public static int num_of_moves;
+	public int maxdepth;
 	
-	public Main(){
+	public Main(int md){
 		board = new Board();
 		lmc = new LegalMoveChecker();
 		mg = new MoveGen(board, lmc);
 		ev = new BoardEvaluator();
 		num_of_moves = 0;
+		maxdepth = md;
 	}
 	
 	public void playerMove(int player){
 		while((board.gameOver() == -1) && !board.draw(this.board)){
-			Best move;
+			Best move_me;
+			Best move_opponent;
+			Best best_move;
 			if(num_of_moves == 0 && board.isEmpty(5, 3)){
-				move = board.firstMove(player);
+				best_move = board.firstMove(player);
 			}
-			else
-				move = Minimax.chooseMove(mg, ev, board, player, 1);
+			else{
+				move_me = Minimax.chooseMove(mg, ev, board, player, 3);
+				//Best move for opponent is best move for me
+				move_opponent = Minimax.chooseMove(mg, ev, board, board.switchPlayer(player),3);
+				move_opponent.getMove().getBoard().put(move_opponent.getMove().getX(), move_opponent.getMove().getY(), player);
+				
+				if (move_me.getScore() >= move_opponent.getScore())
+					best_move = move_me;
+				else
+					best_move = move_opponent;
+			}
 			
-			System.out.printf("%s, %d\n",move.getMove(), move.getScore());
-			board = move.getMove().getBoard();
+			System.out.printf("%s, %d\n",best_move.getMove(), best_move.getScore());
+			board = best_move.getMove().getBoard();
 			player = board.switchPlayer(player);
 			System.out.println(board.printSmall());
 			
@@ -42,17 +55,11 @@ public class Main {
 	}
 	
 	public static void main(String args[]){
-		Main main = new Main();
-		main.board.put(5, 2, main.board.player1());
-		main.board.put(5, 1, main.board.player1());
-		main.board.put(5, 3, main.board.player1());
-		main.board.put(4, 1, main.board.player2());
-		main.board.put(4, 2, main.board.player1());
-		main.board.put(3, 2, main.board.player2());
+		Main main = new Main(10);
 		//main.board.put(2,2, main.board.player1());
 		//boolean win = main.board.win(main.board, main.board.player1());
 		//System.out.println(main.board.printSmall());
 		//System.out.println(win);
-		main.playerMove(main.board.player1());
+		main.playerMove(main.board.player2());
 	}
 }

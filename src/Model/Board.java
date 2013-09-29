@@ -118,6 +118,39 @@ public class Board {
 		//System.out.println("False");
 		return -1;
 	}
+	public int maxInRow(Move m){
+		int count = 0;
+		
+		int north = searchDirCount(Direction.NORTH.fromPos(m.getX(),m.getY()), Direction.NORTH, this.peek(m.getX(), m.getY()));
+		int east = searchDirCount(Direction.EAST.fromPos(m.getX(),m.getY()), Direction.EAST, this.peek(m.getX(), m.getY()));
+		int south = searchDirCount(Direction.SOUTH.fromPos(m.getX(),m.getY()), Direction.SOUTH, this.peek(m.getX(), m.getY()));
+		int west = searchDirCount(Direction.WEST.fromPos(m.getX(),m.getY()), Direction.WEST, this.peek(m.getX(), m.getY()));
+		int northeast = searchDirCount(Direction.NORTHEAST.fromPos(m.getX(),m.getY()), Direction.NORTHEAST, this.peek(m.getX(), m.getY()));
+		int southeast = searchDirCount(Direction.SOUTHEAST.fromPos(m.getX(),m.getY()), Direction.SOUTHEAST, this.peek(m.getX(), m.getY()));
+		int southwest = searchDirCount(Direction.SOUTHWEST.fromPos(m.getX(),m.getY()), Direction.SOUTHWEST, this.peek(m.getX(), m.getY()));
+		int northwest = searchDirCount(Direction.NORTHWEST.fromPos(m.getX(),m.getY()), Direction.NORTHWEST, this.peek(m.getX(), m.getY()));
+		
+		int ns = north+south;
+		int ew = east+west;
+		int nesw = northeast+southwest;
+		int nwse = northwest+southeast;
+		
+		if (ns >= ew && ns >= nesw && ns >= nwse){
+			count = ns;
+		}
+		else if(ew >= ns && ew >= nesw && ew >= nwse){
+			count = ew;
+		}
+		else if(nesw >= ns && nesw >= ew && nesw >= nwse){
+			count = nesw;
+		}
+		else
+			count = nwse;
+
+		if(this.peek(m.getX(), m.getY()) == this.player2())
+			count = -count;
+		return count;
+	}
 	
 	public boolean draw(Board board){
 		for(int i = 0; i < ROWS; i++){
@@ -127,6 +160,18 @@ public class Board {
 			}
 		}
 		return true;
+	}
+	private int searchDirCount(Point p , Direction d , int player){
+		int i = 1;
+		while(i < 4){
+			if(inBounds(p.x,p.y) && peek(p.x,p.y) == player){
+				p = d.fromPos(p.x, p.y);
+				i++;
+			}
+			else
+				return i;
+		}
+		return i;
 	}
 	private int searchDir(Point p, Direction d ,int player){
 		int i = 1;
@@ -171,9 +216,11 @@ public class Board {
 	public static void main(String args[]){
 		Board b = new Board();
 		for(int i = 0; i < 4; i++){
-			b.put(i, 7, b.player2());
+			b.put(i, 2, b.player2());
 		}
-		System.out.println(b.gameOver());
+		System.out.println(b.printSmall());
+		int count = b.maxInRow(new Move(1,2,b));
+		System.out.println(count);
 	}
 
 }

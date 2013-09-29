@@ -28,6 +28,9 @@ public class MoveGen {
 	}
 	public List<Move> generate(Board b, int player){
 		List<Move> legalMoves = new ArrayList<Move>();
+		if(b.gameOver() != -1){
+			return legalMoves;
+		}
 		
 		for(Point p : valid){
 			Board b0 = lmc.isLegal(player, b, p.x, p.y);
