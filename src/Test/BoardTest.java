@@ -2,6 +2,8 @@ package Test;
 
 import static org.junit.Assert.*;
 import Model.Board;
+import Model.Move;
+
 import org.junit.Test;
 
 public class BoardTest {
@@ -39,6 +41,20 @@ public class BoardTest {
 				assertEquals(true,b.isEmpty(i, j));
 			}
 		}
+	}
+	@Test
+	public void count_in_row(){
+		Board b = new Board();
+		b.put(5, 5, b.player1());
+		b.put(5, 3, b.player1());
+		b.put(4, 5, b.player2());
+		b.put(4, 3, b.player2());
+		
+		System.out.println(b.printSmall());
+		int count = b.maxInRow(new Move(5, 5, b));
+		System.out.println(count);
+		assertEquals(3,count);
+
 	}
 
 }

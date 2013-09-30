@@ -55,7 +55,13 @@ public class Main {
 	}
 	
 	public static void main(String args[]){
-		Main main = new Main(10);
+		Main main = new Main(14);
+		main.board.put(5, 5, main.board.player1());
+		main.board.put(5, 4, main.board.player1());
+		main.board.put(5, 3, main.board.player1());
+		main.board.put(4, 5, main.board.player1());
+		main.board.put(3, 5, main.board.player1());
+
 		//main.board.put(2,2, main.board.player1());
 		//boolean win = main.board.win(main.board, main.board.player1());
 		//System.out.println(main.board.printSmall());

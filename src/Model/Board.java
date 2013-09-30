@@ -119,37 +119,21 @@ public class Board {
 		return -1;
 	}
 	public int maxInRow(Move m){
-		int count = 0;
+		int most_in_row = 0;
 		
-		int north = searchDirCount(Direction.NORTH.fromPos(m.getX(),m.getY()), Direction.NORTH, this.peek(m.getX(), m.getY()));
-		int east = searchDirCount(Direction.EAST.fromPos(m.getX(),m.getY()), Direction.EAST, this.peek(m.getX(), m.getY()));
-		int south = searchDirCount(Direction.SOUTH.fromPos(m.getX(),m.getY()), Direction.SOUTH, this.peek(m.getX(), m.getY()));
-		int west = searchDirCount(Direction.WEST.fromPos(m.getX(),m.getY()), Direction.WEST, this.peek(m.getX(), m.getY()));
-		int northeast = searchDirCount(Direction.NORTHEAST.fromPos(m.getX(),m.getY()), Direction.NORTHEAST, this.peek(m.getX(), m.getY()));
-		int southeast = searchDirCount(Direction.SOUTHEAST.fromPos(m.getX(),m.getY()), Direction.SOUTHEAST, this.peek(m.getX(), m.getY()));
-		int southwest = searchDirCount(Direction.SOUTHWEST.fromPos(m.getX(),m.getY()), Direction.SOUTHWEST, this.peek(m.getX(), m.getY()));
-		int northwest = searchDirCount(Direction.NORTHWEST.fromPos(m.getX(),m.getY()), Direction.NORTHWEST, this.peek(m.getX(), m.getY()));
-		
-		int ns = north+south;
-		int ew = east+west;
-		int nesw = northeast+southwest;
-		int nwse = northwest+southeast;
-		
-		if (ns >= ew && ns >= nesw && ns >= nwse){
-			count = ns;
+		for(Direction dir : Direction.values()){
+			int count_in_dir = searchDirCount(dir.fromPos(m.getX(), m.getY()), dir, this.peek(m.getX(),m.getY()));
+			int count_in_opposite_dir = searchDirCount(dir.opposite().fromPos(m.getX(), m.getY()), dir.opposite(), this.peek(m.getX(), m.getY()));
+			int total_count = count_in_dir + count_in_opposite_dir;
+			if(total_count > most_in_row){
+					most_in_row = total_count;
+			}
 		}
-		else if(ew >= ns && ew >= nesw && ew >= nwse){
-			count = ew;
+		most_in_row -= 1;
+		if(this.peek(m.getX(), m.getY()) == this.player2()){
+			return -most_in_row;
 		}
-		else if(nesw >= ns && nesw >= ew && nesw >= nwse){
-			count = nesw;
-		}
-		else
-			count = nwse;
-
-		if(this.peek(m.getX(), m.getY()) == this.player2())
-			count = -count;
-		return count;
+		return most_in_row;
 	}
 	
 	public boolean draw(Board board){
@@ -210,17 +194,30 @@ public class Board {
 			return new Point(x, y + 1);
 		}
 	}
+	public Direction opposite(){
+		switch (this){
+		case NORTH:
+			return SOUTH;
+		case SOUTH:
+			return NORTH;
+		case EAST:
+			return WEST;
+		case WEST:
+			return EAST;
+		case NORTHEAST:
+			return SOUTHWEST;
+		case SOUTHWEST:
+			return NORTHEAST;
+		case NORTHWEST:
+			return SOUTHEAST;
+		case SOUTHEAST:
+			return NORTHWEST;
+		default:
+			return NORTH;
+		}
+			
+	}
 
     }
-	
-	public static void main(String args[]){
-		Board b = new Board();
-		for(int i = 0; i < 4; i++){
-			b.put(i, 2, b.player2());
-		}
-		System.out.println(b.printSmall());
-		int count = b.maxInRow(new Move(1,2,b));
-		System.out.println(count);
-	}
 
 }
